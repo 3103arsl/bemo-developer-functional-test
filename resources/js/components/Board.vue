@@ -6,6 +6,7 @@
 
     <div class="site-body" >
         <button class="creat-col-btn" @click="onOpenForm()">New Column</button>
+        <button class="creat-col-btn" @click="onExport()">Export DB</button>
         <div class="container">
             <div v-for="column in columns" :key="column.id" class="card-column column.title">
                 <div class="taskgroup-heading">
@@ -25,6 +26,7 @@
 import CreateEditColumn from './column/CreateEditColumn'
 import CreateEditCard from './card/CreateEditCard'
 export default {
+    inject: ['VUE_APP_ROOT_API'],
     components: {
         CreateEditColumn,
         CreateEditCard
@@ -52,7 +54,7 @@ export default {
         },
         getColumns () {
             this.axios
-                .post('http://localhost:8000/api/columns')
+                .post(`${this.VUE_APP_ROOT_API}columns`)
                 .then(response => {
                     this.columns = response.data.data;
                 });
@@ -62,10 +64,16 @@ export default {
         },
         onDelete(id) {
             this.axios
-                .delete(`http://localhost:8000/api/columns/${id}`)
+                .delete(`${this.VUE_APP_ROOT_API}columns/${id}`)
                 .then(response => {
                     let i = this.columns.map(item => item.id).indexOf(id); // find index of object
                     this.columns.splice(i, 1)
+                });
+        },
+        onExport() {
+            this.axios
+                .post(`${this.VUE_APP_ROOT_API}database/export`)
+                .then(response => {
                 });
         }
     }

@@ -32,3 +32,7 @@ Route::controller(\App\Http\Controllers\Api\CardController::class)->group(functi
     Route::patch('cards/{id}', 'update');
     Route::delete('cards/{id}', 'destroy');
 });
+
+Route::controller(\App\Http\Controllers\Api\DatabaseController::class)->group(function () {
+    Route::post('database/export', 'export');
+});

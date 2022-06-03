@@ -10,7 +10,6 @@
                 <p>{{card.description}}</p>
             </div>
             <div class="modal__action">
-                <button highlight @click="onEdit">Edit</button>
                 <button @click="onDelete(card.id)">Delete</button>
                 <button @click="onClose">Cancel</button>
             </div>
@@ -19,6 +18,7 @@
 </template>
 <script>
 export default {
+    inject: ['VUE_APP_ROOT_API'],
     props: ['card'],
     data() {
         return {
@@ -36,7 +36,7 @@ export default {
         },
         onDelete(id) {
             this.axios
-                .delete(`http://localhost:8000/api/cards/${id}`)
+                .delete(`${this.VUE_APP_ROOT_API}cards/${id}`)
                 .then(response => {
                     this.$emit('delete-card', response.data.data);
                     this.onClose();

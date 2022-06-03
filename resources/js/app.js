@@ -10,7 +10,6 @@ import CardDetailView from './components/card/CardDetailView'
 import CreateEditCard from './components/card/CreateEditCard'
 
 const app = createApp({})
-
 app.component('task-board', Board)
 app.component('create-edit-column', CreateEditColumn)
 app.component('card-view', CardView)
@@ -19,4 +18,5 @@ app.component('create-edit-card', CreateEditCard)
 
 app.use(VueAxios, axios)
 app.use(vfmPlugin)
+app.provide('VUE_APP_ROOT_API', 'http://localhost:8000/api/')
 app.mount('#app')

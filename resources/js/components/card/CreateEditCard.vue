@@ -29,6 +29,7 @@
 import useVuelidate from '@vuelidate/core'
 import { required, email, minLength } from '@vuelidate/validators'
 export default {
+    inject: ['VUE_APP_ROOT_API'],
     data() {
         return {
             showModal: false,
@@ -67,7 +68,7 @@ export default {
                 this.onShowError()
             }
             this.axios
-                .post(`http://localhost:8000/api/cards/create/${this.column}`,{
+                .post(`${this.VUE_APP_ROOT_API}cards/create/${this.column}`,{
                     title: this.title,
                     description: this.description,
                 })

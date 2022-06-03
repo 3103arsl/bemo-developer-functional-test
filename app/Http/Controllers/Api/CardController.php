@@ -7,8 +7,6 @@ use App\Http\Resources\Card\CardResource;
 use App\Models\Card;
 use App\Models\Column;
 use App\Repositories\CardRepository;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
 
 class CardController extends ApiController
 {

@@ -21745,6 +21745,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  inject: ['VUE_APP_ROOT_API'],
   components: {
     CreateEditColumn: _column_CreateEditColumn__WEBPACK_IMPORTED_MODULE_0__["default"],
     CreateEditCard: _card_CreateEditCard__WEBPACK_IMPORTED_MODULE_1__["default"]
@@ -21773,7 +21774,7 @@ __webpack_require__.r(__webpack_exports__);
     getColumns: function getColumns() {
       var _this = this;
 
-      this.axios.post('http://localhost:8000/api/columns').then(function (response) {
+      this.axios.post("".concat(this.VUE_APP_ROOT_API, "columns")).then(function (response) {
         _this.columns = response.data.data;
       });
     },
@@ -21783,7 +21784,7 @@ __webpack_require__.r(__webpack_exports__);
     onDelete: function onDelete(id) {
       var _this2 = this;
 
-      this.axios["delete"]("http://localhost:8000/api/columns/".concat(id)).then(function (response) {
+      this.axios["delete"]("".concat(this.VUE_APP_ROOT_API, "columns/").concat(id)).then(function (response) {
         var i = _this2.columns.map(function (item) {
           return item.id;
         }).indexOf(id); // find index of object
@@ -21791,6 +21792,9 @@ __webpack_require__.r(__webpack_exports__);
 
         _this2.columns.splice(i, 1);
       });
+    },
+    onExport: function onExport() {
+      this.axios.post("".concat(this.VUE_APP_ROOT_API, "database/export")).then(function (response) {});
     }
   }
 });
@@ -21809,6 +21813,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  inject: ['VUE_APP_ROOT_API'],
   props: ['card'],
   data: function data() {
     return {
@@ -21826,7 +21831,7 @@ __webpack_require__.r(__webpack_exports__);
     onDelete: function onDelete(id) {
       var _this = this;
 
-      this.axios["delete"]("http://localhost:8000/api/cards/".concat(id)).then(function (response) {
+      this.axios["delete"]("".concat(this.VUE_APP_ROOT_API, "cards/").concat(id)).then(function (response) {
         _this.$emit('delete-card', response.data.data);
 
         _this.onClose();
@@ -21888,6 +21893,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  inject: ['VUE_APP_ROOT_API'],
   data: function data() {
     return {
       showModal: false,
@@ -21926,7 +21932,7 @@ __webpack_require__.r(__webpack_exports__);
         this.onShowError();
       }
 
-      this.axios.post("http://localhost:8000/api/cards/create/".concat(this.column), {
+      this.axios.post("".concat(this.VUE_APP_ROOT_API, "cards/create/").concat(this.column), {
         title: this.title,
         description: this.description
       }).then(function (response) {
@@ -21960,6 +21966,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  inject: ['VUE_APP_ROOT_API'],
   data: function data() {
     return {
       showModal: false,
@@ -22000,7 +22007,7 @@ __webpack_require__.r(__webpack_exports__);
         this.onShowError();
       }
 
-      this.axios.post('http://localhost:8000/api/columns/create', {
+      this.axios.post("".concat(this.VUE_APP_ROOT_API, "columns/create"), {
         title: this.title
       }).then(function (response) {
         _this.onClose();
@@ -22066,7 +22073,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[0] || (_cache[0] = function ($event) {
       return $options.onOpenForm();
     })
-  }, "New Column"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.columns, function (column) {
+  }, "New Column"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "creat-col-btn",
+    onClick: _cache[1] || (_cache[1] = function ($event) {
+      return $options.onExport();
+    })
+  }, "Export DB"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.columns, function (column) {
     var _column$relations;
 
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
@@ -22143,7 +22155,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" First modal "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_vue_final_modal, {
     modelValue: $data.showModal,
-    "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
+    "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
       return $data.showModal = $event;
     }),
     classes: "modal-container",
@@ -22160,16 +22172,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.card.description), 1
       /* TEXT */
       )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-        highlight: "",
-        onClick: _cache[1] || (_cache[1] = function () {
-          return _ctx.onEdit && _ctx.onEdit.apply(_ctx, arguments);
-        })
-      }, "Edit"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-        onClick: _cache[2] || (_cache[2] = function ($event) {
+        onClick: _cache[1] || (_cache[1] = function ($event) {
           return $options.onDelete($props.card.id);
         })
       }, "Delete"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-        onClick: _cache[3] || (_cache[3] = function () {
+        onClick: _cache[2] || (_cache[2] = function () {
           return $options.onClose && $options.onClose.apply($options, arguments);
         })
       }, "Cancel")])];
@@ -22453,6 +22460,7 @@ app.component('card-detail-view', _components_card_CardDetailView__WEBPACK_IMPOR
 app.component('create-edit-card', _components_card_CreateEditCard__WEBPACK_IMPORTED_MODULE_9__["default"]);
 app.use(vue_axios__WEBPACK_IMPORTED_MODULE_3__["default"], (axios__WEBPACK_IMPORTED_MODULE_2___default()));
 app.use(vue_final_modal__WEBPACK_IMPORTED_MODULE_4__.vfmPlugin);
+app.provide('VUE_APP_ROOT_API', 'http://localhost:8000/api/');
 app.mount('#app');
 
 /***/ }),
