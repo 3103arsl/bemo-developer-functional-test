@@ -12,6 +12,8 @@
     border: solid 1px rgba(151,151,151,0.21);
     position: relative;
     margin-bottom: 10px;
+    padding: 10px;
+    padding-bottom: 0px;
 }
 
 .rectangle {

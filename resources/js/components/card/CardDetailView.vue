@@ -10,12 +10,32 @@
                 <p>{{card.description}}</p>
             </div>
             <div class="modal__action">
-                <v-button highlight @click="onEdit">Edit</v-button>
-                <v-button @click="onClose">cancel</v-button>
+                <button highlight @click="onEdit">Edit</button>
+                <button @click="onClose">Cancel</button>
             </div>
         </vue-final-modal>
     </div>
 </template>
+<script>
+export default {
+    props: ['card'],
+    data() {
+        return {
+            showModal: false,
+        }
+    },
+    created() {
+    },
+    methods: {
+        onOpen() {
+            this.showModal = true;
+        },
+        onClose() {
+            this.showModal = false;
+        }
+    }
+}
+</script>
 <style scoped>
 ::v-deep .modal-container {
     display: flex;
@@ -32,6 +52,9 @@
     border: 1px solid #e2e8f0;
     border-radius: 0.25rem;
     background: #fff;
+    max-width: 550px;
+    width: 100%;
+    min-height: 200px;
 }
 .modal__title {
     margin: 0 2rem 0.5rem 0;
@@ -55,32 +78,3 @@
     right: 0.5rem;
 }
 </style>
-
-<style scoped>
-.dark-mode div::v-deep .modal-content {
-    border-color: #2d3748;
-    background-color: #1a202c;
-}
-</style>
-
-<script>
-
-export default {
-    props: ['card'],
-    data() {
-        return {
-            showModal: false,
-        }
-    },
-    created() {
-    },
-    methods: {
-        onOpen() {
-            this.showModal = true;
-        },
-        onClose() {
-            this.showModal = false;
-        }
-    }
-}
-</script>
