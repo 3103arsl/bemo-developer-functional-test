@@ -19,6 +19,7 @@
     "dependencies": {
         "vue": "^3.2.36",
         "vue-axios": "^3.4.1",
+        "vue-final-modal": "^3.4.4",
         "vuedraggable": "^4.1.0"
     }
 }
