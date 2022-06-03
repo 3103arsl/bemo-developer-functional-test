@@ -29,6 +29,6 @@ Route::controller(\App\Http\Controllers\Api\ColumnController::class)->group(func
 
 Route::controller(\App\Http\Controllers\Api\CardController::class)->group(function () {
     Route::post('cards/create/{column}', 'store');
-    /*Route::patch('cards/{id}', 'update');
-    Route::delete('cards/{id}', 'destroy');*/
+    Route::patch('cards/{id}', 'update');
+    Route::delete('cards/{id}', 'destroy');
 });

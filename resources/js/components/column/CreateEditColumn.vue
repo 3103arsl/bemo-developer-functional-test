@@ -52,6 +52,7 @@ export default {
         },
         onResetForm(){
             this.title = null;
+            this.description = null;
             this.onRemoveError();
         },
         onSave() {

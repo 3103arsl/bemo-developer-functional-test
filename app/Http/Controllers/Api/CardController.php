@@ -22,9 +22,10 @@ class CardController extends ApiController
     public function store(CardRequest $request, Column $column)
     {
         $this->request = $request;
-        return $column->cards()->saveMany([
+        $model = last($column->cards()->saveMany([
             $this->repository->save($this->getFormData())
-        ]);
+        ]));
+
         if (!$model) {
             return $this->httpResponse->setResponse([
                 'success' => false,
@@ -35,7 +36,8 @@ class CardController extends ApiController
         return $this->httpResponse->setResponse([
             'success' => true,
             'message' => 'Card Created Successfully!',
-            'column' => new CardResource($model),
+            'card' => new CardResource($model),
+            'column'=> $column
         ], self::STATUS_CREATED);
     }
 

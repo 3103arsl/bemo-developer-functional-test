@@ -2,7 +2,7 @@
     <div @click="view" :key="card.id" class="card future-column.id">
         <p class="task-description">{{ card.title }}</p>
     </div>
-    <card-detail-view :card="card" ref="cardDetailView"/>
+    <card-detail-view @delete-card="deleteCardHandler" :card="card" ref="cardDetailView"/>
 </template>
 <style>
 .card {
@@ -60,6 +60,12 @@
     margin-bottom: 5px;
     left: 25px;
 }
+.delete-btn{
+    text-align: right;
+    display: inline-block;
+    float: right;
+
+}
 </style>
 <script>
 import CardDetailView from './CardDetailView'
@@ -79,7 +85,9 @@ export default {
         view() {
             this.$refs.cardDetailView.onOpen();
         },
+        deleteCardHandler(data){
+            this.$emit('delete-card', data);
+        },
     }
-
 }
 </script>

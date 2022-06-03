@@ -21755,11 +21755,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
-    var _this = this;
-
-    this.axios.post('http://localhost:8000/api/columns').then(function (response) {
-      _this.columns = response.data.data;
-    });
+    this.getColumns();
   },
   methods: {
     onOpenForm: function onOpenForm() {
@@ -21768,11 +21764,21 @@ __webpack_require__.r(__webpack_exports__);
     saveColumnHandler: function saveColumnHandler(data) {
       this.columns.push(data.column);
     },
-    onOpenCardForm: function onOpenCardForm() {
-      this.$refs.createEditCard.onOpen();
+    onOpenCardForm: function onOpenCardForm(column) {
+      this.$refs.createEditCard.onOpen(column);
     },
     saveCardHandler: function saveCardHandler(data) {
-      console.log(data.column); //this.columns.push(data.column);
+      this.getColumns();
+    },
+    getColumns: function getColumns() {
+      var _this = this;
+
+      this.axios.post('http://localhost:8000/api/columns').then(function (response) {
+        _this.columns = response.data.data;
+      });
+    },
+    deleteCardHandler: function deleteCardHandler(data) {
+      this.getColumns();
     },
     onDelete: function onDelete(id) {
       var _this2 = this;
@@ -21816,6 +21822,15 @@ __webpack_require__.r(__webpack_exports__);
     },
     onClose: function onClose() {
       this.showModal = false;
+    },
+    onDelete: function onDelete(id) {
+      var _this = this;
+
+      this.axios["delete"]("http://localhost:8000/api/cards/".concat(id)).then(function (response) {
+        _this.$emit('delete-card', response.data.data);
+
+        _this.onClose();
+      });
     }
   }
 });
@@ -21849,6 +21864,9 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     view: function view() {
       this.$refs.cardDetailView.onOpen();
+    },
+    deleteCardHandler: function deleteCardHandler(data) {
+      this.$emit('delete-card', data);
     }
   }
 });
@@ -21867,7 +21885,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _vuelidate_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @vuelidate/core */ "./node_modules/@vuelidate/core/dist/index.esm.js");
-/* harmony import */ var _vuelidate_validators__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @vuelidate/validators */ "./node_modules/@vuelidate/validators/dist/index.esm.js");
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -21876,17 +21893,16 @@ __webpack_require__.r(__webpack_exports__);
       showModal: false,
       showConfirmModal: false,
       title: null,
-      isValid: false
+      description: null,
+      isValid: false,
+      column: null
     };
-  },
-  validations: {
-    title: {
-      required: _vuelidate_validators__WEBPACK_IMPORTED_MODULE_1__.required
-    }
   },
   created: function created() {},
   methods: {
-    onOpen: function onOpen() {
+    onOpen: function onOpen(column) {
+      this.column = column;
+      console.log(this.column, 'column');
       this.showModal = true;
       this.onResetForm();
     },
@@ -21910,14 +21926,15 @@ __webpack_require__.r(__webpack_exports__);
         this.onShowError();
       }
 
-      this.axios.post('http://localhost:8000/api/columns/create', {
-        title: this.title
+      this.axios.post("http://localhost:8000/api/cards/create/".concat(this.column), {
+        title: this.title,
+        description: this.description
       }).then(function (response) {
         _this.onClose();
 
         _this.onResetForm();
 
-        _this.$emit('save-column', response.data.data);
+        _this.$emit('save-card', response.data.data);
       })["catch"](function (error) {
         _this.onShowError();
       });
@@ -21973,6 +21990,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     onResetForm: function onResetForm() {
       this.title = null;
+      this.description = null;
       this.onRemoveError();
     },
     onSave: function onSave() {
@@ -22025,6 +22043,7 @@ var _hoisted_4 = {
   "class": "ellipsis-icon"
 };
 var _hoisted_5 = ["onClick"];
+var _hoisted_6 = ["onClick"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_create_edit_column = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("create-edit-column");
 
@@ -22057,24 +22076,27 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
       "class": "btn btn-danger",
-      onClick: _cache[1] || (_cache[1] = function ($event) {
-        return $options.onOpenCardForm();
-      })
-    }, "Create Card"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      onClick: function onClick($event) {
+        return $options.onOpenCardForm(column.id);
+      }
+    }, "Create Card", 8
+    /* PROPS */
+    , _hoisted_5), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
       "class": "btn btn-danger",
       onClick: function onClick($event) {
         return $options.onDelete(column.id);
       }
     }, "Delete", 8
     /* PROPS */
-    , _hoisted_5)])]), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(column === null || column === void 0 ? void 0 : (_column$relations = column.relations) === null || _column$relations === void 0 ? void 0 : _column$relations.cards, function (card) {
+    , _hoisted_6)])]), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(column === null || column === void 0 ? void 0 : (_column$relations = column.relations) === null || _column$relations === void 0 ? void 0 : _column$relations.cards, function (card) {
       return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_card_view, {
+        onDeleteCard: $options.deleteCardHandler,
         key: card.id,
         card: card,
         "class": "card future-column.id"
       }, null, 8
       /* PROPS */
-      , ["card"]);
+      , ["onDeleteCard", "card"]);
     }), 128
     /* KEYED_FRAGMENT */
     ))]);
@@ -22121,7 +22143,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" First modal "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_vue_final_modal, {
     modelValue: $data.showModal,
-    "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
+    "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
       return $data.showModal = $event;
     }),
     classes: "modal-container",
@@ -22143,7 +22165,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           return _ctx.onEdit && _ctx.onEdit.apply(_ctx, arguments);
         })
       }, "Edit"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-        onClick: _cache[2] || (_cache[2] = function () {
+        onClick: _cache[2] || (_cache[2] = function ($event) {
+          return $options.onDelete($props.card.id);
+        })
+      }, "Delete"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+        onClick: _cache[3] || (_cache[3] = function () {
           return $options.onClose && $options.onClose.apply($options, arguments);
         })
       }, "Cancel")])];
@@ -22186,11 +22212,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.card.title), 1
   /* TEXT */
   )])), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_card_detail_view, {
+    onDeleteCard: $options.deleteCardHandler,
     card: $props.card,
     ref: "cardDetailView"
   }, null, 8
   /* PROPS */
-  , ["card"])], 64
+  , ["onDeleteCard", "card"])], 64
   /* STABLE_FRAGMENT */
   );
 }
@@ -22244,9 +22271,6 @@ var _hoisted_5 = /*#__PURE__*/_withScopeId(function () {
 });
 
 var _hoisted_6 = {
-  key: 0
-};
-var _hoisted_7 = {
   "class": "modal__action"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -22278,11 +22302,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.title]]), $data.isValid ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_4, "Title Required")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("textarea", {
         "class": "txt-area",
         "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
-          return _ctx.description = $event;
+          return $data.description = $event;
         })
       }, null, 512
       /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.description]]), $data.isValid ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_6, "Description Required")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.description]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
         highlight: "",
         onClick: _cache[3] || (_cache[3] = function () {
           return $options.onSave && $options.onSave.apply($options, arguments);
@@ -22514,7 +22538,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.card {\n    margin-right: 15px;\n    margin-left: 15px;\n    background-color: rgba(216, 216, 216, 0.21);\n    border: solid 1px rgba(151,151,151,0.21);\n    position: relative;\n    margin-bottom: 10px;\n    padding: 10px;\n    padding-bottom: 0px;\n}\n.rectangle {\n    width: 57px;\n    height: 6px;\n    position: relative;\n    display: inline-block;\n    margin-left: 7px;\n}\n.list-icon {\n    display: inline-block;\n    margin-left: 7px;\n    margin-bottom: 5px;\n    position: absolute;\n    bottom: 0;\n}\n.task-description {\n    margin-left: 7px;\n    margin-top: 0;\n    font-family: WorkSans;\n    font-size: 14px;\n    letter-spacing: 0.2px;\n    text-align: left;\n    color: #2f2f2f;\n}\n.ellipsis-icon {\n    display: inline-block;\n    float: right;\n    margin-right: 15px;\n}\n.task-date {\n    display: inline-block;\n    font-family: WorkSans;\n    font-size: 10px;\n    letter-spacing: 0.1px;\n    text-align: left;\n    color: #9b9b9b;\n    position: absolute;\n    bottom: 0;\n    margin-bottom: 5px;\n    left: 25px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.card {\n    margin-right: 15px;\n    margin-left: 15px;\n    background-color: rgba(216, 216, 216, 0.21);\n    border: solid 1px rgba(151,151,151,0.21);\n    position: relative;\n    margin-bottom: 10px;\n    padding: 10px;\n    padding-bottom: 0px;\n}\n.rectangle {\n    width: 57px;\n    height: 6px;\n    position: relative;\n    display: inline-block;\n    margin-left: 7px;\n}\n.list-icon {\n    display: inline-block;\n    margin-left: 7px;\n    margin-bottom: 5px;\n    position: absolute;\n    bottom: 0;\n}\n.task-description {\n    margin-left: 7px;\n    margin-top: 0;\n    font-family: WorkSans;\n    font-size: 14px;\n    letter-spacing: 0.2px;\n    text-align: left;\n    color: #2f2f2f;\n}\n.ellipsis-icon {\n    display: inline-block;\n    float: right;\n    margin-right: 15px;\n}\n.task-date {\n    display: inline-block;\n    font-family: WorkSans;\n    font-size: 10px;\n    letter-spacing: 0.1px;\n    text-align: left;\n    color: #9b9b9b;\n    position: absolute;\n    bottom: 0;\n    margin-bottom: 5px;\n    left: 25px;\n}\n.delete-btn{\n    text-align: right;\n    display: inline-block;\n    float: right;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

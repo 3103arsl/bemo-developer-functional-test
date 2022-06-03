@@ -11,6 +11,7 @@
             </div>
             <div class="modal__action">
                 <button highlight @click="onEdit">Edit</button>
+                <button @click="onDelete(card.id)">Delete</button>
                 <button @click="onClose">Cancel</button>
             </div>
         </vue-final-modal>
@@ -32,6 +33,14 @@ export default {
         },
         onClose() {
             this.showModal = false;
+        },
+        onDelete(id) {
+            this.axios
+                .delete(`http://localhost:8000/api/cards/${id}`)
+                .then(response => {
+                    this.$emit('delete-card', response.data.data);
+                    this.onClose();
+                });
         }
     }
 }

@@ -15,7 +15,6 @@
                 <div>
                     <p>Description</p>
                     <textarea class="txt-area" v-model="description"></textarea>
-                    <p v-if="isValid">Description Required</p>
                 </div>
 
             </div>
@@ -35,45 +34,47 @@ export default {
             showModal: false,
             showConfirmModal: false,
             title: null,
-            isValid:false
+            description: null,
+            isValid:false,
+            column:null
         }
-    },
-    validations: {
-        title: { required },
     },
     created() {
 
     },
     methods: {
-        onOpen() {
-            this.showModal = true;
-            this.onResetForm();
+        onOpen(column) {
+            this.column = column
+            console.log(this.column,'column')
+            this.showModal = true
+            this.onResetForm()
         },
         onClose() {
-            this.showModal = false;
+            this.showModal = false
         },
         onShowError(){
-            this.isValid = true;
+            this.isValid = true
         },
         onRemoveError() {
-            this.isValid = false;
+            this.isValid = false
         },
         onResetForm(){
-            this.title = null;
-            this.onRemoveError();
+            this.title = null
+            this.onRemoveError()
         },
         onSave() {
             if(!this.title) {
-                this.onShowError();
+                this.onShowError()
             }
             this.axios
-                .post('http://localhost:8000/api/columns/create',{
+                .post(`http://localhost:8000/api/cards/create/${this.column}`,{
                     title: this.title,
+                    description: this.description,
                 })
                 .then(response => {
                     this.onClose();
                     this.onResetForm();
-                    this.$emit('save-column', response.data.data);
+                    this.$emit('save-card', response.data.data);
                 }) .catch(error => {
                 this.onShowError();
             });

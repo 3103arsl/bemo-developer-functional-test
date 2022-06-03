@@ -11,11 +11,11 @@
                 <div class="taskgroup-heading">
                     <h2>{{ column.title }}</h2>
                     <div class="ellipsis-icon">
-                        <button class="btn btn-danger" @click="onOpenCardForm()">Create Card</button>
+                        <button class="btn btn-danger" @click="onOpenCardForm(column.id)">Create Card</button>
                         <button class="btn btn-danger" @click="onDelete(column.id)">Delete</button>
                     </div>
                 </div>
-                <card-view v-for="card in column?.relations?.cards" :key="card.id" :card="card" class="card future-column.id"/>
+                <card-view @delete-card="deleteCardHandler" v-for="card in column?.relations?.cards" :key="card.id" :card="card" class="card future-column.id"/>
             </div>
         </div>
     </div>
@@ -35,11 +35,7 @@ export default {
         }
     },
     created() {
-        this.axios
-            .post('http://localhost:8000/api/columns')
-            .then(response => {
-                this.columns = response.data.data;
-            });
+        this.getColumns()
     },
     methods: {
         onOpenForm() {
@@ -48,12 +44,21 @@ export default {
         saveColumnHandler(data){
             this.columns.push(data.column);
         },
-        onOpenCardForm() {
-            this.$refs.createEditCard.onOpen();
+        onOpenCardForm(column) {
+            this.$refs.createEditCard.onOpen(column);
         },
         saveCardHandler(data){
-            console.log(data.column);
-            //this.columns.push(data.column);
+            this.getColumns()
+        },
+        getColumns () {
+            this.axios
+                .post('http://localhost:8000/api/columns')
+                .then(response => {
+                    this.columns = response.data.data;
+                });
+        },
+        deleteCardHandler(data){
+            this.getColumns()
         },
         onDelete(id) {
             this.axios
