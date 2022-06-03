@@ -30,13 +30,13 @@ class ColumnRequest extends FormRequest {
             }
             case 'POST': {
                 return [
-                    'title' => ['required|unique:'.$this->table.'|max:100'],
+                    'title' => 'required|unique:'.$this->table.',title|max:100',
                 ];
             }
             case 'PUT':
             case 'PATCH': {
                 return [
-                    'title' => ['required|unique:'.$this->table.','.$this->id.'|max:100'],
+                    'title' => 'required|unique:'.$this->table.',title,'.$this->id.'|max:100',
                 ];
             }
             default:

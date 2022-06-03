@@ -7,11 +7,13 @@
             </button>
             <span class="modal__title">Create Column</span>
             <div class="modal__content">
-
+                <p>Title</p>
+                <input v-model="title" placeholder="Column Title" />
+                <p v-if="isValid">Title Required</p>
             </div>
             <div class="modal__action">
-                <v-button highlight @click="showConfirmModal = true">confirm</v-button>
-                <v-button @click="showModal = false">cancel</v-button>
+                <v-button highlight @click="onSave">Save</v-button>
+                <v-button @click="onClose">cancel</v-button>
             </div>
         </vue-final-modal>
 
@@ -79,28 +81,57 @@
 </style>
 
 <script>
+import useVuelidate from '@vuelidate/core'
+import { required, email, minLength } from '@vuelidate/validators'
 export default {
     data() {
         return {
-            columns: [],
             showModal: false,
-            showConfirmModal: false
+            showConfirmModal: false,
+            title: null,
+            isValid:false
         }
     },
+    validations: {
+        title: { required },
+    },
     created() {
-        this.axios
-            .post('http://localhost:8000/api/columns')
-            .then(response => {
-                this.columns = response.data.data;
-            });
+
     },
     methods: {
         onOpen() {
            this.showModal = true;
+           this.onResetForm();
         },
         onClose() {
             this.showModal = false;
         },
+        onShowError(){
+            this.isValid = true;
+        },
+        onRemoveError() {
+            this.isValid = false;
+        },
+        onResetForm(){
+            this.title = null;
+            this.onRemoveError();
+        },
+        onSave() {
+            if(!this.title) {
+                this.onShowError();
+            }
+            this.axios
+                .post('http://localhost:8000/api/columns/create',{
+                    title: this.title,
+                })
+                .then(response => {
+                    this.onClose();
+                    this.onResetForm();
+                    this.$emit('save-column', response.data.data);
+                }) .catch(error => {
+                    this.onShowError();
+                });
+        }
     }
 }
 </script>

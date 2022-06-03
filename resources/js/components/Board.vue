@@ -1,12 +1,12 @@
 <template>
 
 
-<create-edit-column ref="createEditColumn" />
+<create-edit-column ref="createEditColumn" @save-column="saveColumnHandler"/>
 
 
 
     <div class="site-body">
-        <button class="btn btn-danger" @click="onCreate()">New Column</button>
+        <button class="btn btn-danger" @click="onOpenForm()">New Column</button>
         <div class="container">
             <div v-for="column in columns" :key="column.id" class="card-column column.title">
                 <div class="taskgroup-heading">
@@ -336,6 +336,10 @@ export default {
     methods: {
         onOpenForm() {
             this.$refs.createEditColumn.onOpen();
+        },
+        saveColumnHandler(data){
+            console.log(data.column);
+            this.columns.push(data.column);
         },
         onDelete(id) {
             this.axios

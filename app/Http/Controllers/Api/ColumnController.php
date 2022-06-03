@@ -7,6 +7,7 @@ use App\Http\Resources\Column\ColumnResource;
 use App\Models\Column;
 use App\Repositories\ColumnRepository;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class ColumnController extends ApiController
 {
@@ -24,7 +25,7 @@ class ColumnController extends ApiController
     public function store(ColumnRequest $request)
     {
         $this->request = $request;
-        $model = $this->repository->save($this->setJobData());
+        $model = $this->repository->save($this->getFormData());
         if (!$model) {
             return $this->httpResponse->setResponse([
                 'success' => false,
@@ -34,7 +35,7 @@ class ColumnController extends ApiController
         return $this->httpResponse->setResponse([
             'success' => true,
             'message' => 'Column Created Successfully!',
-            'job' => $model->id,
+            'column' => new ColumnResource($model),
         ], self::STATUS_CREATED);
     }
 
