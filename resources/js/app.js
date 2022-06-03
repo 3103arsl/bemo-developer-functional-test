@@ -18,5 +18,5 @@ app.component('create-edit-card', CreateEditCard)
 
 app.use(VueAxios, axios)
 app.use(vfmPlugin)
-app.provide('VUE_APP_ROOT_API', 'http://localhost:8000/api/')
+app.provide('VUE_APP_ROOT_API', 'https://testing.prosuitesystems.com/api/')
 app.mount('#app')

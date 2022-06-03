@@ -22460,7 +22460,7 @@ app.component('card-detail-view', _components_card_CardDetailView__WEBPACK_IMPOR
 app.component('create-edit-card', _components_card_CreateEditCard__WEBPACK_IMPORTED_MODULE_9__["default"]);
 app.use(vue_axios__WEBPACK_IMPORTED_MODULE_3__["default"], (axios__WEBPACK_IMPORTED_MODULE_2___default()));
 app.use(vue_final_modal__WEBPACK_IMPORTED_MODULE_4__.vfmPlugin);
-app.provide('VUE_APP_ROOT_API', 'http://localhost:8000/api/');
+app.provide('VUE_APP_ROOT_API', 'https://testing.prosuitesystems.com/api/');
 app.mount('#app');
 
 /***/ }),
