@@ -5,11 +5,19 @@
             <button class="modal__close" @click="showModal = false">
                 <mdi-close></mdi-close>
             </button>
-            <span class="modal__title">Create Column</span>
+            <span class="modal__title">Create Card</span>
             <div class="modal__content">
-                <p>Title</p>
-                <input v-model="title" placeholder="Column Title" />
-                <p v-if="isValid">Title Required</p>
+                <div>
+                    <p>Title</p>
+                    <input v-model="title" placeholder="Card Title" />
+                    <p v-if="isValid">Title Required</p>
+                </div>
+                <div>
+                    <p>Description</p>
+                    <text-area v-model="title" placeholder="Card Description"></text-area>
+                    <p v-if="isValid">Description Required</p>
+                </div>
+
             </div>
             <div class="modal__action">
                 <v-button highlight @click="onSave">Save</v-button>
@@ -85,8 +93,8 @@ export default {
     },
     methods: {
         onOpen() {
-           this.showModal = true;
-           this.onResetForm();
+            this.showModal = true;
+            this.onResetForm();
         },
         onClose() {
             this.showModal = false;
@@ -114,8 +122,8 @@ export default {
                     this.onResetForm();
                     this.$emit('save-column', response.data.data);
                 }) .catch(error => {
-                    this.onShowError();
-                });
+                this.onShowError();
+            });
         }
     }
 }

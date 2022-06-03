@@ -2,17 +2,15 @@
     <div>
         <!-- First modal -->
         <vue-final-modal v-model="showModal" classes="modal-container" content-class="modal-content">
-            <button class="modal__close" @click="showModal = false">
+            <button class="modal__close" @click="onClose">
                 <mdi-close></mdi-close>
             </button>
-            <span class="modal__title">Create Column</span>
+            <span class="modal__title">{{card.title}}</span>
             <div class="modal__content">
-                <p>Title</p>
-                <input v-model="title" placeholder="Column Title" />
-                <p v-if="isValid">Title Required</p>
+                <p>{{card.description}}</p>
             </div>
             <div class="modal__action">
-                <v-button highlight @click="onSave">Save</v-button>
+                <v-button highlight @click="onEdit">Edit</v-button>
                 <v-button @click="onClose">cancel</v-button>
             </div>
         </vue-final-modal>
@@ -66,56 +64,22 @@
 </style>
 
 <script>
-import useVuelidate from '@vuelidate/core'
-import { required, email, minLength } from '@vuelidate/validators'
+
 export default {
+    props: ['card'],
     data() {
         return {
             showModal: false,
-            showConfirmModal: false,
-            title: null,
-            isValid:false
         }
     },
-    validations: {
-        title: { required },
-    },
     created() {
-
     },
     methods: {
         onOpen() {
-           this.showModal = true;
-           this.onResetForm();
+            this.showModal = true;
         },
         onClose() {
             this.showModal = false;
-        },
-        onShowError(){
-            this.isValid = true;
-        },
-        onRemoveError() {
-            this.isValid = false;
-        },
-        onResetForm(){
-            this.title = null;
-            this.onRemoveError();
-        },
-        onSave() {
-            if(!this.title) {
-                this.onShowError();
-            }
-            this.axios
-                .post('http://localhost:8000/api/columns/create',{
-                    title: this.title,
-                })
-                .then(response => {
-                    this.onClose();
-                    this.onResetForm();
-                    this.$emit('save-column', response.data.data);
-                }) .catch(error => {
-                    this.onShowError();
-                });
         }
     }
 }

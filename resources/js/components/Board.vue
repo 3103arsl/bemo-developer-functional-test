@@ -1,79 +1,23 @@
 <template>
 
 
-<create-edit-column ref="createEditColumn" @save-column="saveColumnHandler"/>
+    <create-edit-column ref="createEditColumn" @save-column="saveColumnHandler"/>
+    <create-edit-card ref="createEditCard" @save-card="saveCardHandler"/>
 
-
-
-    <div class="site-body">
+    <div class="site-body" >
         <button class="btn btn-danger" @click="onOpenForm()">New Column</button>
         <div class="container">
             <div v-for="column in columns" :key="column.id" class="card-column column.title">
                 <div class="taskgroup-heading">
                     <h2>{{ column.title }}</h2>
                     <div class="ellipsis-icon">
+                        <button class="btn btn-danger" @click="onOpenCardForm()">Create Card</button>
                         <button class="btn btn-danger" @click="onDelete(column.id)">Delete</button>
-<!--                        <img src="https://s3.amazonaws.com/codecademy-content/courses/learn-css-grid/project-ii/Resources/oval-copy.svg">
-                        <img src="https://s3.amazonaws.com/codecademy-content/courses/learn-css-grid/project-ii/Resources/oval-copy.svg">
-                        <img src="https://s3.amazonaws.com/codecademy-content/courses/learn-css-grid/project-ii/Resources/oval-copy.svg">-->
                     </div>
                 </div>
-                <div v-for="card in column?.relations?.cards" :key="card.id" class="card future-column.id">
-                    <div class="rectangle yellow"></div>
-                    <div class="rectangle green"></div>
-                    <div class="rectangle blue"></div>
-                    <div class="rectangle orange"></div>
-                    <p class="task-description">{{ card.title }}</p>
-                    <img class="list-icon" src="https://s3.amazonaws.com/codecademy-content/courses/learn-css-grid/project-ii/Resources/list_icon.svg">
-                    <p class="task-date">4/21/2017</p>
-                </div>
+                <card-view v-for="card in column?.relations?.cards" :key="card.id" :card="card" class="card future-column.id"/>
             </div>
         </div>
-    </div>
-
-
-    <div>
-
-<!--        <ul>
-            <li  v-for="column in columns" :key="column.id">
-                {{ column.title }}
-                <ul v-if="column?.relations?.cards">
-                    <li  v-for="card in column?.relations?.cards" :key="card.id">
-                        {{ card.title }}
-                    </li>
-                </ul>
-            </li>
-        </ul>-->
-
-        <!--      <h3 class="text-center">All Posts</h3><br/>
-       <table class="table table-bordered">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Created At</th>
-                    <th>Updated At</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="post in posts" :key="post.id">
-                    <td>{{ post.id }}</td>
-                    <td>{{ post.title }}</td>
-                    <td>{{ post.description }}</td>
-                    <td>{{ post.created_at }}</td>
-                    <td>{{ post.updated_at }}</td>
-                    <td>
-                        <div class="btn-group" role="group">
-                            <router-link :to="{name: 'edit', params: { id: post.id }}" class="btn btn-primary">Edit
-                            </router-link>
-                            <button class="btn btn-danger" @click="deletePost(post.id)">Delete</button>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>-->
     </div>
 </template>
 <style>
@@ -192,134 +136,14 @@ input {
     top: 100px;
     margin-left: 50px;
 }
-
-.card {
-    margin-right: 15px;
-    margin-left: 15px;
-    background-color: rgba(216, 216, 216, 0.21);
-    border: solid 1px rgba(151,151,151,0.21);
-    position: relative;
-    margin-bottom: 10px;
-}
-
-.rectangle {
-    width: 57px;
-    height: 6px;
-    position: relative;
-    display: inline-block;
-    margin-left: 7px;
-}
-
-.list-icon {
-    display: inline-block;
-    margin-left: 7px;
-    margin-bottom: 5px;
-    position: absolute;
-    bottom: 0;
-}
-
-.task-description {
-    margin-left: 7px;
-    margin-top: 0;
-    font-family: WorkSans;
-    font-size: 14px;
-    letter-spacing: 0.2px;
-    text-align: left;
-    color: #2f2f2f;
-}
-
-.ellipsis-icon {
-    display: inline-block;
-    float: right;
-    margin-right: 15px;
-}
-
-.task-date {
-    display: inline-block;
-    font-family: WorkSans;
-    font-size: 10px;
-    letter-spacing: 0.1px;
-    text-align: left;
-    color: #9b9b9b;
-    position: absolute;
-    bottom: 0;
-    margin-bottom: 5px;
-    left: 25px;
-}
-
-.yellow {
-    background-color: #fdcb1e;
-}
-
-.orange {
-    background-color: #ff7700;
-}
-
-.green {
-    background-color: #50e3c2;
-}
-
-.blue {
-    background-color: #3343e5;
-}
-
-.add-card {
-    background-color: rgba(216, 216, 216, 0.21);
-    border: solid 1px rgba(151,151,151,0.21);
-    color: #2f2f2f;
-}
-
- ::v-deep .modal-container {
-     display: flex;
-     justify-content: center;
-     align-items: center;
- }
-::v-deep .modal-content {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    max-height: 90%;
-    margin: 0 1rem;
-    padding: 1rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.25rem;
-    background: #fff;
-}
-.modal__title {
-    margin: 0 2rem 0.5rem 0;
-    font-size: 1.5rem;
-    font-weight: 700;
-}
-.modal__content {
-    flex-grow: 1;
-    overflow-y: auto;
-}
-.modal__action {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0;
-    padding: 1rem 0 0;
-}
-.modal__close {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-}
-
-
-
-  .dark-mode div::v-deep .modal-content {
-      border-color: #2d3748;
-      background-color: #1a202c;
-  }
-
 </style>
 <script>
 import CreateEditColumn from './column/CreateEditColumn'
+import CreateEditCard from './card/CreateEditCard'
 export default {
     components: {
         CreateEditColumn,
+        CreateEditCard
     },
     data() {
         return {
@@ -338,8 +162,14 @@ export default {
             this.$refs.createEditColumn.onOpen();
         },
         saveColumnHandler(data){
-            console.log(data.column);
             this.columns.push(data.column);
+        },
+        onOpenCardForm() {
+            this.$refs.createEditCard.onOpen();
+        },
+        saveCardHandler(data){
+            console.log(data.column);
+            //this.columns.push(data.column);
         },
         onDelete(id) {
             this.axios

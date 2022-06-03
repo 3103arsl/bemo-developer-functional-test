@@ -3,12 +3,18 @@
 namespace App\Repositories;
 
 use App\Models\Card;
+use Illuminate\Database\Eloquent\Model;
 
 
 class CardRepository extends BaseRepository {
 
-    const COLUMN_RELATION       = 'column';
-    public function __construct(Card $card) {
+    const CARD_RELATION = 'cards';
+    public function __construct() {
+        $this->model = new Card();
+    }
+
+    public function getAll(){
+        return $this->model::get();
     }
 
 }
